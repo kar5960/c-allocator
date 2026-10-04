@@ -7,6 +7,7 @@
 typedef struct block_header{
     size_t size;
     int free;
+    int mmapmapped;
 }block_header_t;
 
 typedef struct free_node{
@@ -26,7 +27,7 @@ block_header_t* find_free_node(size_t size);
 void remove_node(block_header_t* header);
 void insert_node(block_header_t* header);
 
-block_header_t* init_header(void* ptr, size_t size);
+block_header_t* init_header(void* ptr, size_t size, int mmapmapped);
 block_header_t* split_node(block_header_t* header, size_t size);
 block_header_t* merge_node(block_header_t* header, void* heap_end);
 

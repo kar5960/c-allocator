@@ -5,17 +5,20 @@
 #include "internal.h"
 
 #define max(a, b) ((a) > (b) ? (a) : (b))
+#define ALIGN16(x) (((x) + 15) & ~15)
 
 void *heap_end;
 void *my_malloc(size_t size){
+    if(size<=0) return NULL;
     size += sizeof(block_header_t);
+    size=ALIGN16(size);
     block_header_t *header = find_free_node(size);
     int mmapmapped=0;
     if (header == NULL){
         void *ptr;
         size_t alloc_size = ((size + 4095) / 4096) * 4096;
         if (alloc_size <= 128 * 1024){
-            ptr = sbrk(max((sizeof(block_header_t) + sizeof(free_node_t)), alloc_size));
+            ptr = sbrk(alloc_size);
             if (ptr == (void *)-1)
             {
                 perror("sbrk failed");

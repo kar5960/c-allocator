@@ -61,8 +61,8 @@ block_header_t* split_node(block_header_t* header, size_t size){
 block_header_t* merge_node(block_header_t* header, void* heap_end){
      block_header_t* next_header=(block_header_t*)((uint8_t*)header+header->size);
      if((void*)next_header<heap_end&&next_header->free==1){
-        header->size+=next_header->size;
         remove_node(next_header);
+        header->size+=next_header->size;
      }
      return header;
 }
